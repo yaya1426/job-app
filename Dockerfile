@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
     libpq-dev \
     libonig-dev \
     poppler-utils \
+    nginx \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
@@ -39,9 +40,22 @@ COPY . /var/www
 # Copy the existing application directory permissions to the working directory
 COPY --chown=www-data:www-data . /var/www
 
-# Change current user to www
-USER www-data
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Expose port 9000 and start php-fpm server
-EXPOSE 9000
-CMD ["php-fpm"]
+# Install dependencies
+RUN composer install --no-interaction --no-dev --optimize-autoloader
+
+# Configure Nginx
+COPY docker/nginx/conf.d/app.conf /etc/nginx/sites-available/default
+
+# Create startup script
+RUN echo '#!/bin/bash\nservice nginx start\nphp-fpm' > /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
+
+# Expose port 80
+EXPOSE 80
+
+# Start Nginx and PHP-FPM
+CMD ["/usr/local/bin/start.sh"]
