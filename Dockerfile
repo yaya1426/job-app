@@ -40,7 +40,7 @@ RUN apt-get update && apt-get install -y \
 
 # Configure PHP-FPM
 RUN sed -i 's/listen = 127.0.0.1:9000/listen = 8080/g' /usr/local/etc/php-fpm.d/www.conf \
-    && sed -i 's/;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = */g' /usr/local/etc/php-fpm.d/www.conf \
+    && sed -i 's/;listen.allowed_clients = 127.0.0.1/listen.allowed_clients = 127.0.0.1/g' /usr/local/etc/php-fpm.d/www.conf \
     && sed -i 's/;clear_env = no/clear_env = no/g' /usr/local/etc/php-fpm.d/www.conf
 
 # Set working directory
