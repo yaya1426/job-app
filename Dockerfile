@@ -53,5 +53,5 @@ COPY Caddyfile /etc/caddy/Caddyfile
 EXPOSE 80
 EXPOSE 443
 
-# Use the entrypoint script
-ENTRYPOINT ["/app/docker-entrypoint.sh"] 
+# Start FrankenPHP
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"] 
