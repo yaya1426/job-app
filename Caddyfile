@@ -2,7 +2,9 @@
     # Enable FrankenPHP
     frankenphp
     # Enable automatic HTTPS
-    auto_https
+    auto_https {
+        disable_redirects
+    }
 }
 
 # The domain name of your server
