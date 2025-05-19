@@ -43,6 +43,9 @@ RUN composer dump-autoload --optimize
 # Set permissions
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 
+# Make entrypoint script executable
+RUN chmod +x docker-entrypoint.sh
+
 # Copy Caddyfile
 COPY Caddyfile /etc/caddy/Caddyfile
 
@@ -50,5 +53,5 @@ COPY Caddyfile /etc/caddy/Caddyfile
 EXPOSE 80
 EXPOSE 443
 
-# Start FrankenPHP
-CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"] 
+# Use the entrypoint script
+ENTRYPOINT ["/app/docker-entrypoint.sh"] 
