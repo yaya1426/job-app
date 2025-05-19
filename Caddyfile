@@ -1,10 +1,6 @@
 {
     # Enable FrankenPHP
     frankenphp
-    # Enable automatic HTTPS
-    auto_https {
-        disable_redirects
-    }
 }
 
 # The domain name of your server
@@ -17,6 +13,12 @@
     
     # Handle PHP files
     php_server
+
+    # Redirect HTTP to HTTPS
+    @http {
+        protocol http
+    }
+    redir @http https://{host}{uri} permanent
 
     # Security headers
     header {
