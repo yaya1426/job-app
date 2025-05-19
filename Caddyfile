@@ -1,16 +1,34 @@
 {
     # Enable FrankenPHP
     frankenphp
+    # Enable automatic HTTPS
+    auto_https
 }
 
 # The domain name of your server
-:80 {
+:80, :443 {
     # Set the webroot to the public/ directory
     root * public/
     
     # Enable compression
     encode zstd br gzip
     
-    # Execute PHP files from the public/ directory and serve assets
+    # Handle PHP files
     php_server
+
+    # Redirect HTTP to HTTPS
+    @http {
+        protocol http
+    }
+    redir @http https://{host}{uri} permanent
+
+    # Serve static files with proper headers
+    @static {
+        file
+        path *.ico *.css *.js *.gif *.jpg *.jpeg *.png *.svg *.woff *.woff2 *.ttf *.eot
+    }
+    header @static {
+        Cache-Control "public, max-age=31536000"
+        X-Content-Type-Options "nosniff"
+    }
 } 
