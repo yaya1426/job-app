@@ -14,6 +14,10 @@ RUN apt-get update && apt-get install -y \
     default-mysql-client \
     && rm -rf /var/lib/apt/lists/*
 
+# Install Node.js
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
+
 # Install PHP extensions
 RUN install-php-extensions \
     pdo_mysql \
@@ -31,6 +35,12 @@ COPY composer.json composer.lock ./
 # Install Composer dependencies
 RUN composer install --no-scripts --no-autoloader
 
+# Copy package files
+COPY package.json package-lock.json ./
+
+# Install Node.js dependencies
+RUN npm install
+
 # Copy the rest of the application
 COPY . .
 
@@ -39,6 +49,12 @@ COPY php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # Generate autoload files
 RUN composer dump-autoload --optimize
+
+# Run migrations
+RUN php artisan migrate --force
+
+# Build frontend assets
+RUN npm run build
 
 # Set permissions
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
