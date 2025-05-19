@@ -8,4 +8,16 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    server: {
+        https: true,
+    },
+    build: {
+        // Ensure assets are served over HTTPS
+        manifest: true,
+        rollupOptions: {
+            output: {
+                assetFileNames: 'assets/[name]-[hash][extname]',
+            },
+        },
+    },
 });
