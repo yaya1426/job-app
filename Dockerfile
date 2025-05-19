@@ -34,6 +34,9 @@ RUN composer install --no-scripts --no-autoloader
 # Copy the rest of the application
 COPY . .
 
+# Copy PHP configuration
+COPY php.ini /usr/local/etc/php/conf.d/custom.ini
+
 # Generate autoload files
 RUN composer dump-autoload --optimize
 
