@@ -50,9 +50,6 @@ COPY php.ini /usr/local/etc/php/conf.d/custom.ini
 # Generate autoload files
 RUN composer dump-autoload --optimize
 
-# Run migrations
-RUN php artisan migrate --force
-
 # Build frontend assets
 RUN npm run build
 
