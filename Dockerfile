@@ -53,6 +53,10 @@ RUN composer dump-autoload --optimize
 # Build frontend assets
 RUN npm run build
 
+# Ensure the build directory exists and has correct permissions
+RUN mkdir -p public/build && \
+    chown -R www-data:www-data public/build
+
 # Set permissions
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 
