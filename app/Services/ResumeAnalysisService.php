@@ -55,6 +55,8 @@ class ResumeAnalysisService
                 throw new \Exception('Missing required keys in the parsed result');
             }
 
+            Log::info('Parsed result: ' . json_encode($parsedResult));
+
             // Return the JSON object
             return [
                 'summary' => $parsedResult['summary'] ?? '',
