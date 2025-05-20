@@ -14,6 +14,7 @@ export default defineConfig({
     build: {
         // Ensure assets are served over HTTPS
         manifest: true,
+        outDir: 'public/build',
         rollupOptions: {
             output: {
                 assetFileNames: 'assets/[name]-[hash][extname]',
